@@ -1,5 +1,6 @@
 // Get the packages we need
 var express = require('express');
+var path = require('path');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var fs=require('fs');
@@ -7,6 +8,7 @@ var router = express.Router();
 var usersRoutes=require('./routes/usersRoutes');
 var commentBlocksRoutes=require('./routes/commentBlocksRoutes');
 var picsRoutes=require('./routes/picsRoutes');
+var eventsRoutes = require('./routes/events.js');
 
 //replace this with your Mongolab URL
 mongoose.connect('mongodb://ShareThePik:ShareThePik@ds053937.mongolab.com:53937/share_thepik_server_chen');
@@ -31,10 +33,19 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+//var routes = require('./routes/index');
+//var users = require('./routes/users');
+
+//// view engine setup
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'jade');
+//app.use('/', routes);
+
 // All our routes will start with /api
 app.use('/users',usersRoutes);
 app.use('/commentBlocks',commentBlocksRoutes);
 app.use('/pics',picsRoutes);
+app.use('/events', eventsRoutes);
 
 
 // The multer upload picture thing
