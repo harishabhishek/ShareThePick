@@ -14,6 +14,7 @@ var homeRoute = router.route('/');
 
 homeRoute
 .get(function(req,res){
+
 	var QueryWhere = eval("("+req.query.where+")");
 	var QuerySort = eval("("+req.query.sort+")");
 	var QuerySelect = eval("("+req.query.select+")");
