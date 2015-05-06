@@ -97,6 +97,19 @@ picsIDRoute
 
 	});
 })
+.delete(function(req,res){
+	Pic.remove({
+      event: req.params.event_id
+    },function(err,pic){
+		if(err){
+			res.status(500);
+			res.json({message:'Server Error'});
+			res.send(err);
+		}else{
+		res.json({message:'Successfully deleted Pic'});
+		}
+	});
+});
 
 var picsGetByIDRoute= router.route('/getImage/:pic_name');
 
@@ -111,6 +124,19 @@ picsGetByIDRoute
   res.sendFile(file);
 
 })
+.delete(function(req,res){
+	Pic.remove({
+		name:req.params.pic_name
+	},function(err,pic){
+		if(err){
+			res.status(500);
+			res.json({message:'Server Error'});
+			res.send(err);
+		}else{
+		res.json({message:'Successfully deleted user'});
+		}
+	});
+});
 /*
 .put(function(req,res){
 	Pic.findById(req.params.pic_id,function(err,pic){
