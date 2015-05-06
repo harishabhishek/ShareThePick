@@ -4,10 +4,28 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var fs=require('fs');
 var router = express.Router();
+var multer=require('multer');
+var path = require('path');
 
 var Pic=require('./../models/pics');
 
 //
+router.use(multer({dest: './upload/',
+  rename: function (fieldname, filename){
+      return filename + Date.now();
+  },
+  onFileUploadStart: function (file) {
+      console.log(file.originalname+ 'is starting ..')
+  },
+  onFileUploadComplete: function(file){
+      console.log(file.fieldname +'uploaded to ' + file.path);
+      file_name=file.name;
+      file_path=file.path;
+      done=true;;
+  }
+}));
+
+
 var homeRoute = router.route('/');
 
 homeRoute
@@ -36,10 +54,9 @@ homeRoute
 
   pic.event=req.body.event;
   pic.uploader=req.body.uploader;
-  pic.name=req.body.name;
   pic.commentBlocks=req.body.commentBlocks;
-  pic.path=req.body.path;
-//	user.profilepic=fs.readFileSync('smallpic.jpg');
+  pic.path=file_path;
+  pic.name=file_name;
 
   pic.save(function(err){
 		if(err){
@@ -58,11 +75,11 @@ homeRoute
       res.end();
 });
 
-var picsIDRoute = router.route('/:pic_id');
+var picsIDRoute = router.route('/:event_id');
 
 picsIDRoute
 .get(function(req,res){
-	Pic.findById(req.params.pic_id,function(err,pic){
+	Pic.find({"event": req.params.event_id},function(err,pic_list){
 		if(err){
 			res.status(404);
 			res.json({message:'The pic is not found'});
@@ -70,9 +87,24 @@ picsIDRoute
 		}
 		else{
 		res.status(200);
-		res.json({message:'The pic is found',data:pic});}
+		res.json({message:'The pic is found',data:pic_list});}
 	});
 })
+
+var picsGetByIDRoute= router.route('/getImage/:pic_name');
+
+picsGetByIDRoute
+.get(function(req,res){
+
+  image_name = req.params.pic_name;
+  var file = path.join(__dirname, '../upload',image_name)
+  console.log(file);
+
+  res.status(200);
+  res.sendFile(file);
+
+})
+/*
 .put(function(req,res){
 	Pic.findById(req.params.pic_id,function(err,pic){
 		if(err){
@@ -113,5 +145,5 @@ picsIDRoute
 		}
 	});
 });
-
+*/
 module.exports=router;

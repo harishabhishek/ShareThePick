@@ -14,7 +14,6 @@ var homeRoute = router.route('/');
 
 homeRoute
 .get(function(req,res){
-
 	var QueryWhere = eval("("+req.query.where+")");
 	var QuerySort = eval("("+req.query.sort+")");
 	var QuerySelect = eval("("+req.query.select+")");
@@ -37,6 +36,14 @@ homeRoute
 .post(function(req,res){
 	var user=new User();
 
+	var flag = false;
+	if (req.body.name == null || req.body.name == undefined){
+		flag = true;
+	}
+	if (req.body.email == null || req.body.email == undefined){
+		flag = true;
+	}
+
 	user.name=req.body.name;
 	user.email=req.body.email;
 	user.description=req.body.description;
@@ -47,18 +54,29 @@ homeRoute
 //	user.profilepic=fs.readFileSync('smallpic.jpg');
 	user.profilepic=req.body.profilepic;
 
-	user.save(function(err){
-		if(err){
-			res.status(404);
-			return console.error(err);
+	if(flag){
+		res.status(400);
+		toSend = {
+			message: "Name or email not give",
+			data:[]
+		}
+		res.send(toSend);
+	}
+	else{
+		user.save(function(err){
+			if(err){
+				res.status(404);
+				return console.error(err);
 
-		}
-		else{
-			res.status(201);
-			res.json({message:'The new user is created',data:user});
-		}
-	});
+			}
+			else{
+				res.status(201);
+				res.json({message:'The new user is created',data:user});
+			}
+		});
+  }
 })
+
 .options(function(req, res){
       res.writeHead(200);
       res.end();

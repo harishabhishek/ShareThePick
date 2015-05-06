@@ -103,6 +103,9 @@ eventsRoute.post(function (req, res) {
         res.send(toSend);
     }
     else{
+
+
+
         event.save(function(err){
             if(err){
                 res.status(400);
@@ -168,7 +171,7 @@ eventsIdRouter.get(function(req, res){
 /**
  * Events Route Options
  */
-eventsRoute.option(function(req, res){
+eventsRoute.options(function(req, res){
     res.status(200);
     res.end();
 });
@@ -276,7 +279,7 @@ eventsIdRouter.put(function (req, res) {
 
 });
 
-eventsIdRouter.option(function(req, res){
+eventsIdRouter.options(function(req, res){
     res.status(200);
     res.end();
 });
