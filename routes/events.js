@@ -20,7 +20,7 @@ var eventsRoute = router.route('/');
 eventsRoute.get(function(req, res){
 
 
-    console.log("Event Get")
+    console.log("Event Get");
     var query = req.query;
 
     //We need to handle Params
@@ -78,6 +78,9 @@ eventsRoute.get(function(req, res){
 });
 
 
+/**
+ * TODO: CHECK For EMAIL NAME TO BE PRESENT
+ */
 eventsRoute.post(function (req, res) {
 
     console.log("Event POST");
@@ -90,22 +93,35 @@ eventsRoute.post(function (req, res) {
     event.start_date = Date.now();
     event.end_date = Date.now();
 
-    event.save(function(err){
-        if(err){
-            res.status(400);
-            toSend = {
-                message: "There was a server error",
-                data: event
-            };
-            res.send();
-            return console.error(err);
+    if(req.body.name == null || req.body.name == undefined){
 
-        }
-        else{
-            res.status(201);
-            res.json({message:'The new user is created',data:event});
-        }
-    });
+        res.status(400);
+        toSend = {
+            message: "Name Not Provided",
+            data: []
+        };
+        res.send(toSend);
+    }
+    else{
+        event.save(function(err){
+            if(err){
+                res.status(400);
+                toSend = {
+                    message: "There was a server error",
+                    data: event
+                };
+                res.send();
+                return console.error(err);
+
+            }
+            else{
+                res.status(201);
+                res.json({message:'The new user is created',data:event});
+            }
+        });
+    }
+
+
 });
 
 
@@ -147,6 +163,14 @@ eventsIdRouter.get(function(req, res){
         }
     });
 
+});
+
+/**
+ * Events Route Options
+ */
+eventsRoute.option(function(req, res){
+    res.status(200);
+    res.end();
 });
 
 
@@ -250,9 +274,11 @@ eventsIdRouter.put(function (req, res) {
         }
     });
 
+});
 
-
-
+eventsIdRouter.option(function(req, res){
+    res.status(200);
+    res.end();
 });
 
 module.exports = router;
