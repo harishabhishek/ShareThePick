@@ -1,14 +1,26 @@
 // Get the packages we need
+
+
+
 var express = require('express');
 var path = require('path');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session      = require('express-session');
+var passport = require('passport');
+var flash    = require('connect-flash');
+var morgan = require('morgan');
 var fs=require('fs');
+
+
+
 var router = express.Router();
 var usersRoutes=require('./routes/usersRoutes');
 var commentBlocksRoutes=require('./routes/commentBlocksRoutes');
 var picsRoutes=require('./routes/picsRoutes');
 var eventsRoutes = require('./routes/events.js');
+var loginRoutes = require('./routes/login.js');
 
 //replace this with your Mongolab URL
 mongoose.connect('mongodb://ShareThePik:ShareThePik@ds053937.mongolab.com:53937/share_thepik_server_chen');
@@ -41,11 +53,20 @@ app.use(bodyParser.urlencoded({
 //app.set('view engine', 'jade');
 //app.use('/', routes);
 
+// required for passport
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+
+
 // All our routes will start with /api
 app.use('/users',usersRoutes);
 app.use('/commentBlocks',commentBlocksRoutes);
 app.use('/pics',picsRoutes);
 app.use('/events', eventsRoutes);
+app.use('/login', loginRoutes);
 
 
 // The multer upload picture thing

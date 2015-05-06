@@ -169,7 +169,7 @@ eventsIdRouter.get(function(req, res){
 });
 
 /**
- * Events Route Options
+ * Events Route Optionss
  */
 eventsRoute.options(function(req, res){
     res.status(200);
