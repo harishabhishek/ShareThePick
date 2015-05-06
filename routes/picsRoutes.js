@@ -81,13 +81,20 @@ picsIDRoute
 .get(function(req,res){
 	Pic.find({"event": req.params.event_id},function(err,pic_list){
 		if(err){
-			res.status(404);
-			res.json({message:'The pic is not found'});
+      res.status(500);
+			res.json({message:'Problem with the server'});
 			res.send(err);
 		}
 		else{
-		res.status(200);
-		res.json({message:'The pic is found',data:pic_list});}
+      if(pic_list == null){
+        res.status(404);
+  			res.json({message:'The pic is not found'});
+  			res.send(err);
+      }else{
+        res.status(200);
+        res.json({message:'The pic is found',data:pic_list});}
+      }
+
 	});
 })
 
