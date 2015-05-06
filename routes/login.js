@@ -2,9 +2,12 @@
  * Created by new on 5/6/15.
  */
 
-module.exports = function(app, passport) {
+module.exports = function(passport) {
 
-    app.post('/signup', passport.authenticate('local-signup'), function(req, res) {
+    var router = express.Router();
+    var signUp = router.route('/signup');
+
+    signUp.post('/signup', passport.authenticate('local-signup'), function(req, res) {
         res.redirect('/profile.html');
     });
 

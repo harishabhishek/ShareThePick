@@ -12,21 +12,22 @@ var passport = require('passport');
 var flash    = require('connect-flash');
 var morgan = require('morgan');
 var fs=require('fs');
+require('./config/passport')(passport);
 
-
+var app = express();
 
 var router = express.Router();
 var usersRoutes=require('./routes/usersRoutes');
 var commentBlocksRoutes=require('./routes/commentBlocksRoutes');
 var picsRoutes=require('./routes/picsRoutes');
 var eventsRoutes = require('./routes/events.js');
-var loginRoutes = require('./routes/login.js');
+//var loginRouter = require('./routes/login')(app, passport);
 
 //replace this with your Mongolab URL
 mongoose.connect('mongodb://ShareThePik:ShareThePik@ds053937.mongolab.com:53937/share_thepik_server_chen');
 
 // Create our Express application
-var app = express();
+
 
 // Use environment defined port or 4000
 var port = process.env.PORT || 4000;
@@ -66,7 +67,8 @@ app.use('/users',usersRoutes);
 app.use('/commentBlocks',commentBlocksRoutes);
 app.use('/pics',picsRoutes);
 app.use('/events', eventsRoutes);
-app.use('/login', loginRoutes);
+//app.use('/', loginRouter);
+
 
 
 // The multer upload picture thing
