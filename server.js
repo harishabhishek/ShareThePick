@@ -45,7 +45,7 @@ app.use(allowCrossDomain);
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
+app.use(bodyParser.json());
 //var routes = require('./routes/index');
 //var users = require('./routes/users');
 
