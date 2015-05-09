@@ -21,7 +21,7 @@ router.use(multer({dest: './upload/',
       console.log(file.fieldname +'uploaded to ' + file.path);
       file_name=file.name;
       file_path=file.path;
-      done=true;;
+      done=true;
   }
 }));
 
