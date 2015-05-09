@@ -7,8 +7,6 @@ var path = require('path');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var session      = require('express-session');
-var passport = require('passport');
 var flash    = require('connect-flash');
 var morgan = require('morgan');
 var fs=require('fs');
@@ -46,19 +44,14 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
-//var routes = require('./routes/index');
-//var users = require('./routes/users');
 
-//// view engine setup
-//app.set('views', path.join(__dirname, 'views'));
-//app.set('view engine', 'jade');
-//app.use('/', routes);
 
-// required for passport
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+// Configuring Passport
+var passport = require('passport');
+var expressSession = require('express-session');
+app.use(expressSession({secret: 'mySecretKey'}));
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(passport.session());
 
 
 
@@ -71,42 +64,6 @@ app.use('/events', eventsRoutes);
 
 
 
-// The multer upload picture thing
-/*picsRoute.use(multer({dest: './upload/',
-  rename: function (fieldname, filename){
-      return filename + Date.now();
-  },
-  onFileUploadStart: function (file) {
-      console.log(file.originalname+ 'is starting ..')
-  },
-  onFileUploadComplete: function(file){
-      console.log(file.fieldname +'uploaded to ' + file.path);
-      file_name=file.name;
-      haha = " g";
-      done=true;;
-  }
-}));
-
- router.get('/', function (req.res,next){
-    res.render('gallery/upload',{
-        user:req.user
-    });
-});
-
-picsRoute.post('/',function(req,res,next){
-    var event_id = req.query['event_id'];
-    var pic_name = mysql.escape(file_name);
-    console.log(haha);
-    console.log('Pic uploaded to event - ' + event_id + '' + pic_name);
-
-    var query = mysql.format('INSERT INTO' + db.events_pictures + '' +
-    'SET event_id =' event_id + ', picture_name =' + pic_name);
-
-    connection.query(query, function(err,rows,fields){
-        if (err) throw err;
-    });
-
-});*/
 
 app.listen(port);
 console.log('Server running on port ' + port);
