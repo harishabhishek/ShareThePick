@@ -99,7 +99,7 @@ picsIDRoute
 })
 .delete(function(req,res){
 	Pic.remove({
-      event: req.params.event_id
+      _id: req.params.event_id //This ID is the picture's ID
     },function(err,pic){
 		if(err){
 			res.status(500);
