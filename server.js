@@ -12,7 +12,7 @@ var passport = require('passport');
 var flash    = require('connect-flash');
 var morgan = require('morgan');
 var fs=require('fs');
-require('./config/passport')(passport);
+//require('./config/passport')(passport);
 
 var app = express();
 
