@@ -98,17 +98,40 @@ picsIDRoute
 	});
 })
 .delete(function(req,res){
-	Pic.remove({
-      _id: req.params.event_id //This ID is the picture's ID
-    },function(err,pic){
-		if(err){
-			res.status(500);
-			res.json({message:'Server Error'});
-			res.send(err);
-		}else{
-		res.json({message:'Successfully deleted Pic'});
-		}
-	});
+
+        console.log("Pics Delete");
+
+        Pic.find({event : req.params.event_id}, function(err, pics){
+           if(err){
+               res.status(500);
+               res.json({message:'Server Error'});
+           }else{
+
+               console.log(pics);
+
+               for(var i in pics){
+                   var picName = pics[i].name;
+                   var file = path.join(__dirname, '../upload',picName);
+                   openUnlink(file);
+               }
+
+               Pic.remove({
+                   event : req.params.event_id
+               },function(err,pics){
+                   if(err){
+                       res.status(500);
+                       res.json({message:'Server Error'});
+                   }else{
+                       console.log(pics);
+                       res.status(200);
+                       res.json({message:'Successfully deleted Pic'});
+                   }
+               });
+           }
+
+        });
+
+
 });
 
 var picsGetByIDRoute= router.route('/getImage/:pic_name');
@@ -125,6 +148,8 @@ picsGetByIDRoute
 
 })
 .delete(function(req,res){
+
+
 	Pic.remove({
 		name:req.params.pic_name
 	},function(err,pic){
@@ -133,50 +158,24 @@ picsGetByIDRoute
 			res.json({message:'Server Error'});
 			res.send(err);
 		}else{
-		res.json({message:'Successfully deleted user'});
-		}
-	});
-});
-/*
-.put(function(req,res){
-	Pic.findById(req.params.pic_id,function(err,pic){
-		if(err){
-			res.status(404);
-			res.json({message:'The pic is not found'});
-			res.send(err);
-		}else{
-      pic.event=req.body.event;
-      pic.uploader=req.body.uploader;
-      pic.name=req.body.name;
-      pic.commentBlocks=req.body.commentBlocks;
-      pic.path=req.body.path;
-      pic.image=req.body.image;
 
-      pic.save(function(err){
-				if (err){
-					res.status(500);
-					res.json({message:'There is a server error when updating'});
-					res.send(err);
-				}else{
-					res.status(201);
-					res.json({message:'Pic Updated',data:pic});
-				}
-			});
-		}
-	});
-})
-.delete(function(req,res){
-	Pic.remove({
-		_id:req.params.pic_id
-	},function(err,pic){
-		if(err){
-			res.status(404);
-			res.json({message:'The Pic does not exit'});
-			res.send(err);
-		}else{
-		res.json({message:'Successfully deleted Pic'});
+            var file = path.join(__dirname, '../upload', req.params.pic_name);
+
+            openUnlink(file);
+
+		    res.json({message:'Successfully deleted picture'});
 		}
 	});
 });
-*/
+
+function openUnlink(name) {
+    console.log(name);
+    fs.open(name, 'w', function (err) {
+        console.log(' + ' + name);
+        fs.unlinkSync(name, function (err) {
+            console.log('   - ' + name);
+        });
+    });
+}
+
 module.exports=router;
