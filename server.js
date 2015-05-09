@@ -19,7 +19,7 @@ var usersRoutes=require('./routes/usersRoutes');
 var commentBlocksRoutes=require('./routes/commentBlocksRoutes');
 var picsRoutes=require('./routes/picsRoutes');
 var eventsRoutes = require('./routes/events.js');
-var authRoutes = require('./routes/auth.js');
+
 //var loginRouter = require('./routes/login')(app, passport);
 
 //replace this with your Mongolab URL
@@ -47,6 +47,8 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 
+//var authRoutes = require('./routes/auth.js')(passport);
+
 // Configuring Passport
 var passport = require('passport');
 var expressSession = require('express-session');
@@ -61,10 +63,10 @@ app.use('/users',usersRoutes);
 app.use('/commentBlocks',commentBlocksRoutes);
 app.use('/pics',picsRoutes);
 app.use('/events', eventsRoutes);
-app.use('/auth', authRoutes);
+//app.use('/auth', authRoutes);
 
-
-
+require('./config/passport')(passport);
+require('./routes/auth')(app, passport);
 
 
 app.listen(port);
