@@ -89,11 +89,12 @@ eventsRoute.post(function (req, res) {
     event.name = req.body.name;
     event.description = req.body.description;
     event.location = req.body.location;
-    event.list_user_id = [];
+    //event.list_user_id = [];
+    event.list_user_id = req.body.list_user_id;
     event.start_date = Date.now();
     event.end_date = Date.now();
 
-    if(req.body.name == null || req.body.name == undefined){
+    if(!req.body.name){
 
         res.status(400);
         toSend = {
@@ -233,7 +234,6 @@ eventsIdRouter.delete(function (req, res) {
  * TODO: Error handling
  */
 eventsIdRouter.put(function (req, res) {
-
     var requestedId = req.params.id;
 
     var givenName = req.body.name;
