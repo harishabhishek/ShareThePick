@@ -10,7 +10,7 @@ var cookieParser = require('cookie-parser');
 var flash    = require('connect-flash');
 var morgan = require('morgan');
 var fs=require('fs');
-//require('./config/passport')(passport);
+
 
 var app = express();
 
@@ -19,6 +19,7 @@ var usersRoutes=require('./routes/usersRoutes');
 var commentBlocksRoutes=require('./routes/commentBlocksRoutes');
 var picsRoutes=require('./routes/picsRoutes');
 var eventsRoutes = require('./routes/events.js');
+var authRoutes = require('./routes/auth.js');
 //var loginRouter = require('./routes/login')(app, passport);
 
 //replace this with your Mongolab URL
@@ -60,7 +61,8 @@ app.use('/users',usersRoutes);
 app.use('/commentBlocks',commentBlocksRoutes);
 app.use('/pics',picsRoutes);
 app.use('/events', eventsRoutes);
-//app.use('/', loginRouter);
+app.use('/auth', authRoutes);
+
 
 
 
