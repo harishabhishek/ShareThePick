@@ -144,6 +144,10 @@ usersIDRoute
                 user.profilepic = req.body.profilepic;
             }
 
+            if(req.body.number_photo != undefined){
+                user.number_photo = req.body.number_photo;
+            }
+
 
 			user.save(function(err){
 				if (err){
