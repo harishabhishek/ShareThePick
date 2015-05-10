@@ -57,7 +57,7 @@ module.exports = function(app, passport) {
 
 
 
-    app.get('/auth/logout', function(res, req){
+    app.get('/auth/logout', function(req, res){
 
         req.logout();
 
