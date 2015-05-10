@@ -127,9 +127,15 @@ usersIDRoute
             if(req.body.description != undefined){
                 user.description=req.body.description;
             }
+
             if(req.body.password != undefined){
-                user.password = user.generateHash(password);
+                if(req.body.newPassword == undefined){
+                    user.password =req.body.password;
+                }else{
+                    user.password = user.generateHash(req.body.newPassword);
+                }
             }
+
             if(req.body.location != undefined){
                 user.location=req.body.location;
             }
