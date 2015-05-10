@@ -91,8 +91,19 @@ eventsRoute.post(function (req, res) {
     event.location = req.body.location;
     //event.list_user_id = [];
     event.list_user_id = req.body.list_user_id;
-    event.start_date = Date.now();
-    event.end_date = Date.now();
+    if(req.body.start_date == null || req.body.start_date == undefined){
+        event.start_date = Date.now();
+    }
+    else{
+        event.start_date = req.body.start_date;
+    }
+
+    if(req.body.end_date == null || req.body.end_date == undefined){
+        event.end_date = Date.now();
+    }
+    else{
+        event.end_date = req.body.end_date;
+    }
 
     if(!req.body.name){
 
