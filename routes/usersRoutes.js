@@ -140,8 +140,10 @@ usersIDRoute
                 user.location=req.body.location;
             }
 
-			if(file_name)
-                user.profilepic = file_name;
+            if(req.body.profilepic != undefined){
+                user.profilepic = req.body.profilepic;
+            }
+
 
 			user.save(function(err){
 				if (err){
