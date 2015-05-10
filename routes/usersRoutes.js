@@ -111,6 +111,7 @@ usersIDRoute
 			user.date_created=req.body.date_created;
 			user.number_photo=req.body.number_photo;
 			user.list_event=req.body.list_event;
+			user.profilepic=req.body.profilepic;
 
 			user.save(function(err){
 				if (err){
