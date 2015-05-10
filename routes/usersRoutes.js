@@ -6,6 +6,23 @@ var fs=require('fs');
 var router = express.Router();
 
 var User=require('./../models/users');
+var multer=require('multer');
+var path = require('path');
+
+router.use(multer({dest: './upload/',
+    rename: function (fieldname, filename){
+        return filename + Date.now();
+    },
+    onFileUploadStart: function (file) {
+        console.log(file.originalname+ 'is starting ..')
+    },
+    onFileUploadComplete: function(file){
+        console.log(file.fieldname +'uploaded to ' + file.path);
+        file_name=file.name;
+        file_path=file.path;
+        done=true;
+    }
+}));
 
 //
 var homeRoute = router.route('/');
@@ -104,14 +121,21 @@ usersIDRoute
 			res.json({message:'The user is not found'});
 			res.send(err);
 		}else{
-			user.name=req.body.name;
-			user.email=req.body.email;
-			user.description=req.body.description;
-			user.location=req.body.location;
-			user.date_created=req.body.date_created;
-			user.number_photo=req.body.number_photo;
-			user.list_event=req.body.list_event;
-			user.profilepic=req.body.profilepic;
+            if(req.body.name != undefined){
+                user.name=req.body.name;
+            }
+            if(req.body.description != undefined){
+                user.description=req.body.description;
+            }
+            if(req.body.password != undefined){
+                user.password = user.generateHash(password);
+            }
+            if(req.body.location != undefined){
+                user.location=req.body.location;
+            }
+
+			if(file_name)
+                user.profilepic = file_name;
 
 			user.save(function(err){
 				if (err){
